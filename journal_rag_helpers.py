@@ -120,18 +120,22 @@ def extract_keywords(openai_client, query):
     return final_answer.choices[0].message.content
 
 def query_to_filtered_df(openai_client, journal_query, df):
-    """
-    we can't send the full journal to OpenAI, so here in this function to filter the df to less entries.
-    Entries that would be useful. Restrict by date if date was in the query, by keywords if no dates.
-    """
     if contains_date(journal_query):
         keywords = False
         date_range = json.loads(extract_date_range(openai_client, journal_query))
         print(date_range)
     else:
         date_range = False
-        keywords = json.loads(extract_keywords(openai_client, journal_query))
-        print(keywords)
+        try:
+            raw_keywords = extract_keywords(openai_client, journal_query)
+            print(raw_keywords)
+            keywords = json.loads(raw_keywords)
+        except json.JSONDecodeError:
+            print("Error decoding JSON for keywords.")
+            return pd.DataFrame(), False
+        except Exception as e:
+            print(f"Unexpected error extracting keywords: {e}")
+            return pd.DataFrame(), False
     if date_range:
         year, months_str = convert_json_to_year_and_months_str(date_range)
         print("Year:", year)

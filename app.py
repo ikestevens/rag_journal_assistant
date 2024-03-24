@@ -67,6 +67,9 @@ if st.button("Query") or st.session_state.get('button_clicked', False):
             if filtered_df.shape[0] == 0:
                 number_of_calls = 1
                 response = "No entries identified from query. Please adjust query and try again."
+            elif filtered_df.empty:
+                response = "Rephrase your query and try again. No keywords were identified."
+                number_of_calls = 1
             else:
                 batches = create_batches_from_df(filtered_df)
                 if date_range:
