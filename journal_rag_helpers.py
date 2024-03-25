@@ -102,11 +102,11 @@ def extract_keywords(openai_client, query):
 
     Question: When did I read the book Invisible Women?
 
-    Keyword(s): ["Invisible Women"]
+    Answer: ["Invisible Women"]
 
     Ex. When was my graduation from UVA?
 
-    Keyword(s): ["graduation", "graduate", "grad", "UVA", "University of Virginia"]
+    Answer: ["graduation", "graduate", "grad", "UVA", "University of Virginia"]
     """
 
     meta_query = extract_prompt + \
@@ -302,6 +302,7 @@ def batch_prompt_date(openai_client, journal_query, batches):
         messages=[{"role": "user", "content": final_prompt}],
         model="gpt-3.5-turbo",
         )
+    number_of_calls += 1
     return final_answer.choices[0].message.content, summaries, number_of_calls
 
 def batch_prompt_date_non_date(openai_client, journal_query, batches):
@@ -342,4 +343,5 @@ def batch_prompt_date_non_date(openai_client, journal_query, batches):
         messages=[{"role": "user", "content": final_prompt}],
         model="gpt-3.5-turbo",
         )
+    number_of_calls += 1
     return final_answer.choices[0].message.content, number_of_calls

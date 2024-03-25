@@ -106,12 +106,13 @@ if st.button("Query") or st.session_state.get('button_clicked', False):
         summaries_with_breaks = "<br><br><br><br>".join(f"{summary}" for summary in st.session_state['summaries'])
         st.markdown(summaries_with_breaks, unsafe_allow_html=True)
 
-    st.markdown("### Filtered Dataframe")
-    filtered_df['Year'] = filtered_df['Year'].astype(str)
-    # Display the number of records in 'filtered_df'
-    num_records = len(filtered_df)
-    st.markdown(f"#### Number of Records: {num_records}")
+    if not filtered_df.empty:
+        st.markdown("### Filtered Dataframe")
+        filtered_df['Year'] = filtered_df['Year'].astype(str)
+        # Display the number of records in 'filtered_df'
+        num_records = len(filtered_df)
+        st.markdown(f"#### Number of Records: {num_records}")
 
-    # Display the first few rows of 'filtered_df'
-    st.markdown("#### DataFrame Preview:")
-    st.dataframe(filtered_df.head())  # Display the first 5 rows
+        # Display the first few rows of 'filtered_df'
+        st.markdown("#### DataFrame Preview:")
+        st.dataframe(filtered_df.head())  # Display the first 5 rows
